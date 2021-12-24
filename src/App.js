@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import { socket } from './Socketservice'
 
-function App() {
+export const App = () => {
+
+  const [user, setUser] = useState([])
+  const [user2, setUser2] = useState([])
+  const [one, setOne] = useState(false)
+
+  useEffect(() => {
+    socket.emit('sayHello','Web Girdi');
+    socket.on('msg', (ds)=>{
+      console.log(ds)
+    });
+    socket.on('message', (data) => {
+      // setUser((msj)=> [...msj,data])
+      setUser((datas)=>[...datas,data])
+    })
+  },[])
+
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {user && user.map((data, i) => {
+        return <p key={i} >{data}  </p>
+      })}
     </div>
-  );
+  )
 }
-
-export default App;
